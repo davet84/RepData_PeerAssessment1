@@ -7,16 +7,29 @@ output:
 
 
 ## Loading and preprocessing the data
-
-
+```{r}
+fileurl <- "https://d396qusza40orc.cloudfront.net/repdata%2Fdata%2Factivity.zip"
+download.file(fileurl, destfile="./repdata-data-activity.zip")
+data <- read.csv(unz("repdata-data-activity.zip", "activity.csv"))
+`
 
 ## What is mean total number of steps taken per day?
+```{r}
+mean.steps <- tapply(data$steps, data$date, FUN=sum, na.rm=T)
+print(mean.steps)
+hist(mean.steps, breaks=10, xlab="Total number of steps per day")
 
+mean(mean.steps)
+median(mean.steps)
 
+```
 
 ## What is the average daily activity pattern?
+meaninterval.steps <- averages <- aggregate(x=list(steps=data$steps), by=list(interval=data$interval), FUN=mean, na.rm=TRUE)
 
+plot(meaninterval.steps, type="l")
 
+meaninterval.steps[which.max(averages$steps),]
 
 ## Imputing missing values
 
